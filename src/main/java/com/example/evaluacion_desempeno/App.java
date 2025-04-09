@@ -8,6 +8,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import com.example.CargaDatosTemporales;
+import com.example.Excepciones.EmpleadoInvalidoException;
+import com.example.Excepciones.ReporteInvalidoException;
+import com.example.controlador.SceneManager;
+import com.example.vista.MainMenuView;
+
 /**
  * JavaFX App
  */
@@ -16,10 +22,19 @@ public class App extends Application {
     private static Scene scene;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) throws EmpleadoInvalidoException, ReporteInvalidoException {
+        CargaDatosTemporales.cargar();
+        
+        try {
+            SceneManager.setStage(primaryStage); // REGISTRO
+            MainMenuView menu = new MainMenuView();
+            Scene scene = new Scene(menu.getView(), 600, 400);
+            primaryStage.setTitle("CompuWork - Gestión de Recursos Humanos");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     static void setRoot(String fxml) throws IOException {
